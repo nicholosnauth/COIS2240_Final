@@ -1,0 +1,13 @@
+
+<?import javafx.scene.canvas.*?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane fx:controller="core.Controller"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:id="anchor" prefWidth="1000" prefHeight="600" >
+    <Canvas fx:id="gameCanvas" width="1000" height="600"
+            AnchorPane.bottomAnchor="0.0"
+            AnchorPane.leftAnchor="0.0"
+            AnchorPane.rightAnchor="0.0"
+            AnchorPane.topAnchor="0.0" />
+</AnchorPane>
