@@ -28,7 +28,6 @@ public class ObjectHandler {
             object.get(i).tick();
             object.get(i).checkCollision();
         }
-
         render();
     }
 
@@ -80,10 +79,21 @@ public class ObjectHandler {
         object.clear();
     }
 
-    public void removeObjectType(GameObject temp, ID id){
+    public void removeObjectType(ID id){
         for(int i = 0; i < object.size(); i++) {
-            if (temp.getId() == id) this.object.remove(temp);
+            if (this.object.get(i).getId() == id) this.object.remove(this.object.get(i));
         }
+    }
+
+    public GameObject findPlayer(){
+        GameObject temp = null;
+
+        for(int i = 0; i < object.size(); i++) {
+            if (this.object.get(i).getId() == ID.Player)
+                temp = this.object.get(i);
+        }
+
+        return temp;
     }
 
 }

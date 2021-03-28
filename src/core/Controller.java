@@ -1,13 +1,7 @@
 package core;
 
-import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
-
-import java.awt.*;
+import javafx.scene.layout.Pane;
 
 /** This is where the game is drawn, there shouldn't really be any need to change anything, though you might
  * if you need to  make a new group of some sort that needs to be updated every frame.
@@ -15,15 +9,13 @@ import java.awt.*;
 public class Controller {
 
     public Canvas gameCanvas;
-    public AnchorPane anchor;
-
-    public GraphicsContext gc;
+    public Pane pane;
 
     /** This is where the Canvas is drawn */
     public void initialize(){
         ObjectHandler handler = new ObjectHandler(gameCanvas);
-        Spawner spawner = new Spawner(handler);
-        gc = gameCanvas.getGraphicsContext2D();
+        Camera camera = new Camera(handler, pane);
+        Spawner spawner = new Spawner(handler, camera);
 
         // This line is just to spawn the player for demo purposes.
         spawner.spawnPlayer(500, 300);
@@ -46,6 +38,7 @@ public class Controller {
             public void tick(float frameTime) {
                 handler.tick();
                 spawner.tick();
+                camera.tick();
             }
         };
         loop.start();

@@ -25,11 +25,11 @@ public abstract class GameObject {
 
     /** Constructor for invisible objects (triggers, walls, etc,
      *  anything that doesn't need to be rendered on the canvas) */
-    public GameObject(int posX, int posY, int height, int width, ID id){
+    public GameObject(int posX, int posY, int height, int width, ObjectHandler handler){
         this.position = new Point2D(posX, posY);
         this.width = width;
         this.height = height;
-        this.id = id;
+        this.handler = handler;
     }
 
     /** This tick method is overridden and called every frame by the ObjectHandler. */
@@ -76,6 +76,12 @@ public abstract class GameObject {
         return width;
     }
 
+    public void setVelX(int velX) {
+        this.velX = velX;
+    }
 
+    public void setVelY(int velY) {
+        this.velY = velY;
+    }
 
 }

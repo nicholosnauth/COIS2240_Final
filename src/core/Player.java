@@ -12,7 +12,7 @@ import javafx.scene.input.KeyEvent;
  * */
 public class Player extends GameObject {
 
-    private int speedMod;
+    private double speedMod;
     Image playerImage = new Image("resources/man.png");
 
     public Player(int posX, int posY, ObjectHandler handler) {
@@ -27,7 +27,7 @@ public class Player extends GameObject {
     @Override
     public void checkCollision(){
         // Like the sample below that's just a placeholder (player colliding with itself), just put
-        handler.collision(this, this.getId() );
+        handler.collision(this, ID.Player );
     }
 
     @Override
