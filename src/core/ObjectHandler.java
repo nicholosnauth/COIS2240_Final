@@ -26,20 +26,18 @@ public class ObjectHandler {
     public void tick(){
         for(int i = 0; i < object.size(); i++){
             object.get(i).tick();
-            object.get(i).checkCollision();
+            collision(object.get(i));
         }
         render();
     }
 
 
-    public void collision(GameObject temp, ID id){
+    public void collision(GameObject temp){
         for(int i = 0; i < object.size(); i++){
-            if(object.get(i).getId() == id ){
                 if(temp.getBounds().intersects(object.get(i).getBounds()))
-                temp.collisionCode(id);
+                temp.collisionCode(object.get(i).getId());
             }
         }
-    }
 
     public void render(){
         context.save();

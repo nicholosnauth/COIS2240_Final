@@ -25,15 +25,8 @@ public class Player extends GameObject {
     }
 
     @Override
-    public void checkCollision(){
-        // Like the sample below that's just a placeholder (player colliding with itself), just put
-        handler.collision(this, ID.Player );
-    }
-
-    @Override
     public void collisionCode(ID id) {
-        // This is just a sample as I said before to test the collision. You'll need to make a new if statement
-        // for each object that the current object collides with if you want anything to happen.
+        // Set an if statement like the one below for the ID of the object you want.
         if (id == ID.Player){
             // Code for what happens to the object when colliding with something with the corresponding ID
             System.out.println("Hello");

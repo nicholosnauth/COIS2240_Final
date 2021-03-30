@@ -1,6 +1,7 @@
 
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.layout.Pane?>
+<!--The dimensions of the Pane and Canvas should be equal to the dimensions of the level image -->
 <Pane fx:controller="core.Controller"
             xmlns:fx="http://javafx.com/fxml"
             fx:id="pane" prefWidth="3000" prefHeight="2000" >
