@@ -15,8 +15,8 @@ public class Camera {
 
     public void tick(){
         if(target != null) {
-            pane.setTranslateX(-target.getPosition().getX() + 500);
-            pane.setTranslateY(-target.getPosition().getY() + 300);
+            pane.setTranslateX(-target.getPosition().getX() + 475);
+            pane.setTranslateY(-target.getPosition().getY() + 275);
         }
     }
 

@@ -10,6 +10,7 @@ public enum ID {
 
 
     // --- OTHER --- //
+    Bullet(),
 
 
 }

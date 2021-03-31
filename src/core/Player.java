@@ -1,11 +1,14 @@
 package core;
 
+import Objects.Bullet;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 
 /** The player, as well as the player's controls.
  * Only reason I can think of to change this would be to adjust player speed
@@ -13,6 +16,7 @@ import javafx.scene.input.KeyEvent;
 public class Player extends GameObject {
 
     private double speedMod;
+
     Image playerImage = new Image("resources/man.png");
 
     public Player(int posX, int posY, ObjectHandler handler) {
@@ -26,11 +30,7 @@ public class Player extends GameObject {
 
     @Override
     public void collisionCode(ID id) {
-        // Set an if statement like the one below for the ID of the object you want.
-        if (id == ID.Player){
-            // Code for what happens to the object when colliding with something with the corresponding ID
-            System.out.println("Hello");
-        }
+
     }
 
     @Override
@@ -39,28 +39,68 @@ public class Player extends GameObject {
         position = new Point2D(position.getX() + velX*speedMod, position.getY() + velY*speedMod);
     }
 
+    public void setSpeedMod(double speedMod) {
+        this.speedMod = speedMod;
+    }
+
+
+
+
+
+
+
+
+
+
+    // --- Below here is all information for player input --- //
+
+    private int fireRate = 20;
+    private int bulletVel = 15;
+    private int timer = 0;
+
     public void playerInput(){
         PlayerInput e = PlayerInput.newInput();
-
         e.press();
-        if(e.up) velY = -5;
-        else if(!e.down) velY = 0;
-        if(e.left) velX = -5;
-        else if(!e.right) velX = 0;
-        if(e.down) velY = 5;
-        if(e.right) velX = 5;
 
-        if(e.up && e.down) velY = 0;
-        if(e.left && e.right) velX = 0;
+        // Player Movement
+        if(PlayerInput.up) velY = -5;
+        else if(!PlayerInput.down) velY = 0;
+        if(PlayerInput.left) velX = -5;
+        else if(!PlayerInput.right) velX = 0;
+        if(PlayerInput.down) velY = 5;
+        if(PlayerInput.right) velX = 5;
+
+        if(PlayerInput.up && PlayerInput.down) velY = 0;
+        if(PlayerInput.left && PlayerInput.right) velX = 0;
+
+        // --- Player firing
+        // Calculates the unit vector to allow for consistent bullet velocity.
+        // Note that since PlayerInput is static, this code can be copied anywhere it's needed.
+        double mdX = PlayerInput.mouseX - 500;
+        double mdY = PlayerInput.mouseY - 300;
+        double mHyp = Math.sqrt(mdX * mdX + mdY * mdY);
+        //Use mnx and mny to modify velocity direction.
+        double mux = mdX / mHyp;
+        double muy = mdY / mHyp;
+
+        timer ++;
+        if (timer >= fireRate){
+            if (PlayerInput.firing){
+            handler.addObject(new Bullet(this.handler, bulletVel*mux, bulletVel*muy));
+            timer = 0;
+            }
+        }
 
     }
 
-    /** Nested class for inputs, most of the properties are static as there's no need to worry about
-     * multiple instances of player input, and it's easier to set the scene from Main that way.
+    /** Nested class for inputs, most of the properties are static as there's no need to worry
+     * about multiple instances of player input, and it's easier to set the scene from Main that way.
      * */
     static class PlayerInput{
         private static boolean up, down, left, right;
+        private static boolean firing;
         private static Scene scene;
+        public static double mouseX, mouseY;
 
         public static PlayerInput newInput(){
             return new PlayerInput();
@@ -77,6 +117,9 @@ public class Player extends GameObject {
         public void press(){
             scene.setOnKeyPressed(keyDown);
             scene.setOnKeyReleased(keyUp);
+            scene.setOnMousePressed(mouseDown);
+            scene.setOnMouseDragged(mouseDown);
+            scene.setOnMouseReleased(mouseUp);
         }
 
 
@@ -118,10 +161,29 @@ public class Player extends GameObject {
             }
         };
 
+        // Mouse events, implemented the same way as above
+        EventHandler<MouseEvent> mouseDown = e ->{
+          if (e.getButton() == MouseButton.PRIMARY){
+              firing = true;
+              mouseX = e.getX();
+              mouseY = e.getY();
+          }
+        };
+        EventHandler<MouseEvent> mouseUp = e ->{
+            if (e.getButton() == MouseButton.PRIMARY){
+                firing = false;
+            }
+        };
+
     }
 
     // --- Getters and setters --- //
-    public void setSpeedMod(int speedMod) {
-        this.speedMod = speedMod;
+    public void setFireRate(int fireRate) {
+        this.fireRate = fireRate;
     }
+
+    public void setBulletVel(int bulletVel) {
+        this.bulletVel = bulletVel;
+    }
+
 }

@@ -10,12 +10,15 @@ import java.lang.reflect.Constructor;
 public abstract class GameObject {
 
     protected Point2D position;
-    protected int velX, velY;
+    protected double velX, velY;
     protected int height, width;
     protected ObjectHandler handler;
 
     private ID id;
     private Image image;
+
+    public GameObject() {
+    }
 
     /** Constructor for visible objects. The image should be defined in the respective class */
     public GameObject(int posX, int posY, ObjectHandler handler) {
