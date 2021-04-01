@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
+<GridPane alignment="CENTER" vgap="50"
+          xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="Menus.MenuCont"
+          prefHeight="600.0" prefWidth="1000.0">
+
+    <Text text="TD Game" GridPane.columnIndex="0" GridPane.rowIndex="0">
+        <font>
+            <Font size="30"/>
+        </font>
+    </Text>
+
+    <Button text = "Start Game" GridPane.rowIndex="1" GridPane.columnIndex="0"
+            fx:id = "startGame" onAction="#startGame"/>
+
+    <Button text = "High Scores" GridPane.rowIndex="2" GridPane.columnIndex="0"
+            fx:id = "scoreBoard" onAction="#scoreBoard"/>
+
+    <Button text = "Quit" GridPane.rowIndex="3" GridPane.columnIndex="0"
+            onAction="#endGame"/>
+
+</GridPane>

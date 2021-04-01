@@ -23,11 +23,13 @@ public class ObjectHandler {
 
     /** This method contains a loop that checks the tick method of every object in the list and runs it
      * There shouldn't be any reason to modify it */
-    public void tick(){
-        for(int i = 0; i < object.size(); i++){
-            object.get(i).tick();
+    public void tick() {
+
+        for (int i = 0; i < object.size(); i++) {
             collision(object.get(i));
+            object.get(i).tick();
         }
+
         render();
     }
 

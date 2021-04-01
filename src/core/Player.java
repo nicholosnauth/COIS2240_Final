@@ -1,5 +1,6 @@
 package core;
 
+import Menus.Launcher;
 import Objects.Bullet;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -91,13 +92,26 @@ public class Player extends GameObject {
             }
         }
 
+        // Exits the game upon registering that the escape key has been pressed.
+        // This may be changed later to a pause rather than a hard exit
+        if (PlayerInput.exit){
+            Launcher launch = new Launcher();
+            try {
+                launch.mainMenu();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+            handler.clearObjects();
+        }
+
     }
 
     /** Nested class for inputs, most of the properties are static as there's no need to worry
      * about multiple instances of player input, and it's easier to set the scene from Main that way.
      * */
-    static class PlayerInput{
+    public static class PlayerInput{
         private static boolean up, down, left, right;
+        private static boolean exit;
         private static boolean firing;
         private static Scene scene;
         public static double mouseX, mouseY;
@@ -140,6 +154,10 @@ public class Player extends GameObject {
             if (e.getCode().equals(KeyCode.D)) {
                 right = true;
             }
+
+            if (e.getCode().equals(KeyCode.ESCAPE)){
+                exit = true;
+            }
         };
 
         // Sets the directional values to false upon key event
@@ -159,6 +177,11 @@ public class Player extends GameObject {
             if (e.getCode().equals(KeyCode.D)) {
                 right = false;
             }
+
+            if (e.getCode().equals(KeyCode.ESCAPE)){
+                exit = false;
+            }
+
         };
 
         // Mouse events, implemented the same way as above

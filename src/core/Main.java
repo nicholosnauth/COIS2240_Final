@@ -1,5 +1,6 @@
 package core;
 
+import Menus.Launcher;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,13 +13,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("../resources/sample.fxml"));
-        Scene scene = new Scene(root, 1000, 600, Color.SLATEGRAY);
+        Parent root = FXMLLoader.load(getClass().getResource("../Menus/MainMenu.fxml"));
+        Launcher.scene = new Scene(root, 1000, 600, Color.SLATEGRAY);
 
-        Player.PlayerInput.newInput().setScene(scene);
 
         primaryStage.setTitle("Hello World");
-        primaryStage.setScene(scene);
+        primaryStage.setScene(Launcher.scene);
         primaryStage.setResizable(false);
 
 
