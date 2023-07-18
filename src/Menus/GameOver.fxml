@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.Font?>
+<?import Menus.CappedTextField?>
+<GridPane alignment="CENTER" vgap="20" hgap="20"
+          xmlns="http://javafx.com/javafx"
+          xmlns:fx="http://javafx.com/fxml"
+          fx:controller="Menus.MenuCont"
+          prefHeight="600.0" prefWidth="1000.0">
+
+    <Text text="Game Over" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="3" GridPane.halignment="CENTER">
+        <font>
+            <Font size="30"/>
+        </font>
+    </Text>
+
+    <Text fx:id="score" GridPane.rowIndex="1" GridPane.columnIndex="0" GridPane.columnSpan="3" GridPane.halignment="CENTER">
+        <font>
+            <Font size="18"/>
+        </font>
+    </Text>
+
+    <Label text="NAME:" GridPane.rowIndex="2" GridPane.columnIndex="0" GridPane.halignment="RIGHT"/>
+    <HBox GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="50" maxWidth="50">
+    <CappedTextField fx:id="name"/>
+    </HBox>
+
+
+
+    <Button text = "SUBMIT SCORE" GridPane.rowIndex="3" GridPane.columnIndex="0" GridPane.halignment="CENTER" minWidth="100"
+            fx:id = "submitScore" onAction="#submitScore"/>
+
+    <Button text = "SEE SCORES" GridPane.rowIndex="3" GridPane.columnIndex="1" GridPane.halignment="CENTER" minWidth="100"
+            fx:id = "scoreBoard" onAction="#scoreBoard"/>
+
+    <Button text = "MAIN MENU" GridPane.rowIndex="3" GridPane.columnIndex="2" GridPane.halignment="CENTER" minWidth="100"
+            fx:id = "returnToMainMenu" onAction="#mainMenu"/>
+
+</GridPane>

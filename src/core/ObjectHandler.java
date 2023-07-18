@@ -2,6 +2,7 @@ package core;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 
 import java.util.LinkedList;
@@ -13,6 +14,9 @@ import java.util.LinkedList;
 public class ObjectHandler {
     Canvas canvas;
     GraphicsContext context;
+
+    //Background temp
+    Image bkg = new Image("resources/Level1.png");
 
     LinkedList<GameObject> object = new LinkedList<>();
 
@@ -26,9 +30,12 @@ public class ObjectHandler {
     public void tick() {
 
         for (int i = 0; i < object.size(); i++) {
-            collision(object.get(i));
-            object.get(i).tick();
+                object.get(i).tick();
         }
+        for (int i = 0; i < object.size(); i++) {
+                collision(object.get(i));
+        }
+        
 
         render();
     }
@@ -36,21 +43,30 @@ public class ObjectHandler {
 
     public void collision(GameObject temp){
         for(int i = 0; i < object.size(); i++){
-                if(temp.getBounds().intersects(object.get(i).getBounds()))
-                temp.collisionCode(object.get(i).getId());
+                if(temp.getBounds().intersects(object.get(i).getBounds())) {
+                    if (temp != object.get(i))
+                        temp.collisionCode(object.get(i).getId(), object.get(i));
+                }
             }
+
+
         }
+
 
     public void render(){
         context.save();
 
         // !! These lines render the background, they can be replaced if a new class or method is made to
         // define the background. They're just a placeholder for now.
-        context.setFill(Color.PINK);
+        context.setFill(Color.SLATEGRAY);
         context.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
+        context.drawImage(bkg, 0, 0);
+
         // End of background space
 
         // Renders object by their respective images and locations
+
+
         for(int i = 0; i < object.size(); i++){
 
             // This if statement can be removed if game boundaries are not defined by objects.
@@ -61,6 +77,8 @@ public class ObjectHandler {
                         object.get(i).getPosition().getY());
             }
         }
+
+
         context.restore();
 
     }
@@ -85,6 +103,13 @@ public class ObjectHandler {
         }
     }
 
+    public boolean objectHandled(GameObject temp){
+        for(int i = 0; i < object.size(); i++) {
+            if (this.object.get(i) == temp) return true;
+        }
+        return false;
+    }
+
     public GameObject findPlayer(){
         GameObject temp = null;
 
@@ -95,5 +120,6 @@ public class ObjectHandler {
 
         return temp;
     }
+
 
 }

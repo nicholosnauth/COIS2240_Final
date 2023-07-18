@@ -7,10 +7,16 @@ public enum ID {
     Player(),
 
     // --- ENEMIES --- //
+    BasicEnemy(),
+    SingleFireEnemy(),
+    BossEnemy(),
 
+    // --- BULLET --- //
+    Bullet(),
+    EnemyBullet(),
 
     // --- OTHER --- //
-    Bullet(),
-
+    MobSpawner(),
+    Barrier(),
 
 }

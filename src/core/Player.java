@@ -5,6 +5,7 @@ import Objects.Bullet;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
+
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -16,9 +17,13 @@ import javafx.scene.input.MouseEvent;
  * */
 public class Player extends GameObject {
 
-    private double speedMod;
+    private boolean immune = false;//when true the player is immune
+    private int IFrames;//counter for the length the player is immune for
+    Image playerImage = new Image("resources/man.png");//booger man image
+    Image playerImageD = new Image("resources/ManD.png");
+    PlayerStats user = PlayerStats.getInstance();
 
-    Image playerImage = new Image("resources/man.png");
+    private final int baseSpeed = 10;
 
     public Player(int posX, int posY, ObjectHandler handler) {
         super(posX, posY, handler);
@@ -26,53 +31,83 @@ public class Player extends GameObject {
         this.setImage(playerImage);
         width = (int) playerImage.getWidth();
         height = (int) playerImage.getHeight();
-        this.speedMod = 1;
+
     }
 
-    @Override
-    public void collisionCode(ID id) {
 
+    public void collisionCode(ID id, GameObject gameObj) {
+        if(id == ID.EnemyBullet){
+            handler.removeObject(gameObj);//removes enemy bullet
+            damagePlayer();
+        }else if(id == ID.BossEnemy || id == ID.BasicEnemy || id == ID.SingleFireEnemy){
+            damagePlayer();
+        }
+
+        if(id == ID.Barrier){
+            nonStaticBarrier(this, gameObj);
+        }
+
+
+    }
+
+    public void damagePlayer(){
+        if(IFrames <= 0) {
+            user.setHealth(user.getHealth() - 1);
+            IFrames = user.getImmuneTime();//counter starts for the immunity period
+            this.setImage(playerImageD);
+        }
     }
 
     @Override
     public void tick() {
         playerInput();
-        position = new Point2D(position.getX() + velX*speedMod, position.getY() + velY*speedMod);
+
+        if (IFrames > 0){
+            IFrames--;
+
+            if(IFrames % 10 == 0){
+                if(this.getImage() == playerImage)
+                    this.setImage(playerImageD);
+                else
+                    this.setImage(playerImage);
+            }
+
+            if(IFrames <= 0)
+                this.setImage(playerImage);
+        }
+
+        playerInput();//take in player input
+        position = new Point2D(position.getX() + velX, position.getY() + velY);
+
     }
-
-    public void setSpeedMod(double speedMod) {
-        this.speedMod = speedMod;
-    }
-
-
-
-
-
-
 
 
 
 
     // --- Below here is all information for player input --- //
-
-    private int fireRate = 20;
-    private int bulletVel = 15;
     private int timer = 0;
 
     public void playerInput(){
-        PlayerInput e = PlayerInput.newInput();
+        PlayerInput e = PlayerInput.getInput();
         e.press();
 
-        // Player Movement
-        if(PlayerInput.up) velY = -5;
-        else if(!PlayerInput.down) velY = 0;
-        if(PlayerInput.left) velX = -5;
-        else if(!PlayerInput.right) velX = 0;
-        if(PlayerInput.down) velY = 5;
-        if(PlayerInput.right) velX = 5;
+        double mX = 0, mY = 0;
+        //mX = 0; mY = 0;
 
-        if(PlayerInput.up && PlayerInput.down) velY = 0;
-        if(PlayerInput.left && PlayerInput.right) velX = 0;
+        if(PlayerInput.up) mY -= 1;
+        if(PlayerInput.down) mY +=1;
+        if(PlayerInput.left) mX -= 1;
+        if(PlayerInput.right) mX += 1;
+
+        double Hyp = Math.sqrt(mX * mX + mY * mY);
+        if (Hyp == 0) Hyp = 1;
+        //Use mnx and mny to modify velocity direction.
+        double uX = mX / Hyp;
+        double uY = mY / Hyp;
+
+        velX = baseSpeed*uX*user.getSpeedMod(); velY = baseSpeed*uY*user.getSpeedMod();
+
+
 
         // --- Player firing
         // Calculates the unit vector to allow for consistent bullet velocity.
@@ -85,9 +120,9 @@ public class Player extends GameObject {
         double muy = mdY / mHyp;
 
         timer ++;
-        if (timer >= fireRate){
+        if (timer >= user.getFireRate()){
             if (PlayerInput.firing){
-            handler.addObject(new Bullet(this.handler, bulletVel*mux, bulletVel*muy));
+            handler.addObject(new Bullet(this.handler, user.getBulletVel()*mux, user.getBulletVel()*muy));
             timer = 0;
             }
         }
@@ -97,7 +132,7 @@ public class Player extends GameObject {
         if (PlayerInput.exit){
             Launcher launch = new Launcher();
             try {
-                launch.mainMenu();
+                launch.gameEnd();
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -116,7 +151,7 @@ public class Player extends GameObject {
         private static Scene scene;
         public static double mouseX, mouseY;
 
-        public static PlayerInput newInput(){
+        public static PlayerInput getInput(){
             return new PlayerInput();
         }
         public PlayerInput() {
@@ -200,13 +235,6 @@ public class Player extends GameObject {
 
     }
 
-    // --- Getters and setters --- //
-    public void setFireRate(int fireRate) {
-        this.fireRate = fireRate;
-    }
 
-    public void setBulletVel(int bulletVel) {
-        this.bulletVel = bulletVel;
-    }
 
 }

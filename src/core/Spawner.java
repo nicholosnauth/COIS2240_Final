@@ -1,5 +1,8 @@
 package core;
 
+import Objects.*;
+import levels.Loader;
+
 /** A placeholder spawner class. At the moment, does basically nothing */
 public class Spawner {
     private ObjectHandler handler;
@@ -15,11 +18,23 @@ public class Spawner {
     public void spawnPlayer(int x, int y){
         handler.addObject(new Player(x, y, handler));
         camera.findTarget();
+        HUD.setPlayer(handler.findPlayer());
     }
 
-    public void tick(){
+    public void spawnBasicEnemy(int x, int y){
+        handler.addObject(new BasicEnemy(x, y, handler));
+        Loader.enemyCount++;
     }
 
+    public void spawnSingleEnemy(int x, int y){
+        handler.addObject(new SingleFireEnemy(x,y,handler));
+        Loader.enemyCount++;
+    }
+
+    public void spawnBossEnemy(int x, int y){
+        handler.addObject(new BossEnemy(x,y,handler));
+        Loader.enemyCount++;
+    }
 
 
 }
